@@ -263,7 +263,7 @@ function simulateNew() {
     // * 因为是模拟函数，所以调用时是 simulateNew(A, ...)
     // * 所以需要取出第一个参数作为 new 的构造函数
     var Constructor = [].shift.call(arguments);
-    // 2. 将新对象的原型指向构造函数
+    // 2. 将新对象的原型指向构造函数的原型
     obj.__proto__ = Constructor.prototype;
     // 3. 使用 apply 改变 this 指向到新对象上
     var ret = Constructor.apply(obj, arguments);
