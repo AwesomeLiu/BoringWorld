@@ -218,7 +218,7 @@ function flatten(arr) {
  * @param  {boolean} shallow 是否只扁平一层
  * @param  {boolean} strict  是否严格处理元素，下面有解释
  * @param  {Array} output  这是为了方便递归而传递的参数
- * 源码地址：https://github.com/jashkenas/underscore/blob/master/underscore.js#L528
+ * 源码地址：https://github.com/jashkenas/underscore/blob/master/underscore.js#L1030
  */
 function flatten(input, shallow, strict, output) {
     output = output || [];
@@ -267,7 +267,117 @@ function simulateNew() {
     obj.__proto__ = Constructor.prototype;
     // 3. 使用 apply 改变 this 指向到新对象上
     var ret = Constructor.apply(obj, arguments);
-    // 4. 如果构造函数有返回值，且是个对象，则直接返回该返回值；否则返回新对象
-    return typeof ret === 'object' ? ret : obj;
+    // 4. 如果构造函数有返回值，不为 null 且是个对象，则直接返回该返回值；否则返回新对象
+    return ret != null && typeof ret === 'object' ? ret : obj;
 };
+```
+
+### 6. 模拟实现 `Promise.all()` / `Promise.any()` / `Promise.race()` / `Promise.allSettled()`
+
+#### Promise.all()
+
+```js
+function proAll(proArr) {
+    if (proArr != null && typeof proArr[Symbol.iterator] === "function") {
+        return new Promise((resolve, reject) => {
+            let result = [];
+            let len = proArr.length;
+            let count = 0;
+
+            if (len === 0) {
+                return resolve([]);
+            }
+            
+            for (let i = 0; i < len; i++) {
+                proArr[i].then(data => {
+                    result[i] = data;
+                    if (++count === len) {
+                        resolve(result);
+                    }
+                }, reject);
+            }
+        });
+    } else {
+        console.error(new TypeError(`${typeof proArr} ${proArr} is not iterable`));
+    }
+}
+```
+
+#### Promise.any
+
+```js
+function proAny(proArr) {
+    if (proArr != null && typeof proArr[Symbol.iterator] === "function") {
+        return new Promise((resolve, reject) => {
+            let errors = [];
+            let len = proArr.length;
+            let count = len;
+
+            if (len === 0) {
+                return reject(new AggregateError("All promises were rejected"));
+            }
+
+            for (let i = 0; i < len; i++) {
+                proArr[i].then(resolve, (err) => {
+                    errors[i] = err;
+                    if (--count === 0) {
+                        reject(errors);
+                    }
+                });
+            }
+        });
+    } else {
+        console.error(new TypeError(`${typeof proArr} ${proArr} is not iterable`));
+    }
+}
+```
+
+#### Promise.race
+
+```js
+function proRace(proArr) {
+    if (proArr != null && typeof proArr[Symbol.iterator] === "function") {
+        return new Promise((resolve, reject) => {
+            for (let i = 0; i < proArr.length; i++) {
+                proArr[i].then(resolve, reject);
+            }
+        });
+    } else {
+        console.error(new TypeError(`${typeof proArr} ${proArr} is not iterable`));
+    }
+}
+```
+
+#### Promise.allSettled()
+
+```js
+function proAllSettled(proArr) {
+    if (proArr != null && typeof proArr[Symbol.iterator] === "function") {
+        return new Promise((resolve, reject) => {
+            let result = [];
+            let len = proArr.length;
+            let count = len;
+
+            for (let i = 0; i < len; i++) {
+                proArr[i].then(data => {
+                    result[i] = {
+                        status: "fulfilled",
+                        value: data
+                    };
+                }).catch(err => {
+                    result[i] = {
+                        status: "rejected",
+                        reason: err
+                    };
+                }).finally(() => {
+                    if (--count === 0) {
+                        resolve(result);
+                    }
+                });
+            }
+        });
+    } else {
+        console.error(new TypeError(`${typeof proArr} ${proArr} is not iterable`));
+    }
+}
 ```

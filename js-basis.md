@@ -473,3 +473,67 @@ ES6 模块与 CommonJS 模块的差异：
 3. 不能通过 `new` 关键字调用，没有 `new.target`
 4. 没有原型，不能调用 `super`
 
+### 14. Event Loop 事件循环机制
+
+> JS 主线程不断的循环往复的从任务队列中读取任务，执行任务，这种运行机制称为事件循环（event loop）
+
+在事件循环中，每进行一次循环操作称为 tick，每一次 tick 的任务处理模型是比较复杂的，但关键步骤如下：
+
++ 执行一个宏任务（栈中没有就从事件队列中获取）
+
++ 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
+
++ 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
+
++ 当前宏任务执行完毕，开始检查渲染，然后GUI线程接管渲染
+
++ 渲染完毕后，JS线程继续接管，开始下一个宏任务（从事件队列中获取）
+
+![Event Loop](./img/eventloop.png)
+
+#### 宏任务 Macrotasks
+
++ 整体代码
+
++ setTimeout / setInterval / setImmediate（Node.js 环境）
+
++ I/O
+
++ UI 渲染交互
+
++ postMessage
+
++ MessageChannel
+
+#### 微任务 Microtasks
+
++ Promise.then
+
++ MutaionObserver
+
++ process.nextTick（Node.js 环境）
+
+#### Promise 和 await
+
+`Promise` 本身是同步的立即执行函数，而异步体现在 `then` 和 `catch` 中
+
+`await` 是一个让出线程的标志。由于 `async/await` 本身是 `promise + generator` 的语法糖，所以会先执行 `await` 后的表达式，然后将 `await` 之后的代码加入到 `microtask` 中，最后跳出整个 `async` 函数来执行后面的代码
+
+```js
+async function foo() {
+	console.log('start');
+	await bar();
+	console.log('end');
+}
+```
+
+等价于
+
+```js
+async function foo() {
+	console.log('start');
+	Promise.resolve(bar()).then(() => {
+        console.log('end');
+    });
+}
+```
