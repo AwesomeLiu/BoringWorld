@@ -4,7 +4,7 @@
 
 0. JS 基础数据类型
 1. `var` / `let` / `const` 的区别
-2. 什么是闭包？手写一个闭包
+2. 什么是闭包？【手写】闭包中怎么解决回收？
 3. `call` / `apply` / `bind` 的区别？【手写】
 4. 谈谈对原型和原型链的理解
 5. 隐式转换问题
@@ -25,11 +25,17 @@
 20. `Map` / `Set` / `WeakMap` / `WeakSet` 的区别
 21. 变量提升问题
 22. 什么是函数柯里化？ 【手写】
-23. 链式调用 【手写】
-24. 数组排序的方法及**复杂度**
+23. 链式调用 【手写】（LazyMan）
+24. 数组排序的方法及**复杂度**。sort 排序，用了什么排序？
 25. 字符串模板是怎么解析的？
 26. `try...catch` 和 `Promise.catch` 的区别？ `try...catch` 能捕获 `Promise` 里的错误吗？
 27. 事件的三个阶段分别是？捕获目标冒泡 事件委托
+28. `map` 和 `forEach` 的区别
+29. 栈和堆
+30. `JSON.stringfy` 的缺点
+31. `Proxy` 和 `Object.defineProperty()`
+32. `typeof` 和 `instanceof`
+33. 
 
 ## HTML5 和 CSS3
 
@@ -46,7 +52,10 @@
 11. async 和 defer 的区别
 12. BFC
 13. 伪类和伪元素
-14. 
+14. 外边距塌陷、父容器高度塌陷
+15. `DOM0` / `DOM2` / `DOM3`
+16. CSS 单位 `px` / `rem` / `em`
+17. 
 
 ## 网络知识
 
@@ -61,15 +70,25 @@
 9. `http/1.0` / `http/1.1` / `http/2` / `https` 的区别和原理
 10. `http` 头部都有哪些？
 11. CDN 是什么？获取最近节点资源的算法是什么？为什么可以实现 CDN 加速？
-12. 中间人攻击劫持
-13. 
+12. 前端安全（中间人攻击劫持（MITM）、XSS、CSRF）
+13. JSONP
+14. Redis
+15. chrome 调试 performance
+16. TCP 和 UDP
+17. `JWT` `Cookie` `Session` 的区别
+18. `websocket` 和 `keep-alive`
+19. v8 垃圾回收
+20. `XMLHttpRequest`
+21. 怎么设置会让 cookie 自动添加到请求头？
+22. 双栏布局、三栏布局（圣杯布局、双飞翼布局等）
+23. http 请求时有序的吗？如何保证有序？
 
 ## 手写
 
 1. 并发调用只调用一次，怎么实现？
 2. 如何重新定义 `getter` / `setter` 方法？
 3. 请实现一个 `retry` 方法，在给定的次数中尝试，只要有一次成功即为成功，否则失败 
-4. 节流 (throttle) 和 防抖 (debounce) 的实现
+4. 节流 (throttle) 和 防抖 (debounce) 的实现，都有哪些场景？
 5. 如何判断一个单链有环？
 6. 如何判断循环引用？
 7. 请实现 `Promise.any` / `Promise.all` 方法
@@ -97,3 +116,8 @@
 27. 【工程化】 首屏和白屏及其他页面时间计算？区别？优化？
 31. 【React】 React 如何优化？
 33. 【React】 React fiber
+34. 【React】 react-router 原理 hash 模式和 history 模式
+35. node.js / egg.js
+36. 【工程化】 首屏优化方案
+37. 【工程化】 CI/CD
+38. 【工程化】 mock.js
